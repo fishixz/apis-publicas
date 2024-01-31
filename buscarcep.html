@@ -1,1 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesquise o CEP</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: #f2f2f2;
+        }
+        h1 {
+            color: #333;
+        }
+        #search-container {
+            margin-top: 30px;
+        }
+        #search-input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        #search-button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        #result-container {
+            margin-top: 20px;
+            display: none;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #4CAF50;
+        }
+        p {
+            margin: 10px 0;
+        }
+        #signature {
+            margin-top: 50px;
+            font-style: italic;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pesquise o CEP</h1>
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="Digite o CEP">
+        <button onclick="searchCep()" id="search-button">Pesquisar</button>
+    </div>
 
+    <div id="result-container">
+        <h2>Resultado da Pesquisa</h2>
+        <p><strong>CEP:</strong> <span id="cep"></span></p>
+        <p><strong>Estado:</strong> <span id="state"></span></p>
+        <p><strong>Cidade:</strong> <span id="city"></span></p>
+        <p><strong>Bairro:</strong> <span id="neighborhood"></span></p>
+        <p><strong>Rua:</strong> <span id="street"></span></p>
+        <p><strong>Resultado:</strong> <span id="result"></span></p>
+    </div>
+
+    <div id="signature">
+        Desenvolvido por @Edyxluis
+    </div>
+
+    <script>
+        function searchCep() {
+            var inputCep = document.getElementById('search-input').value;
+            
+            fetch(`https://brasilapi.com.br/api/cep/v1/${inputCep}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayResult(data);
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar CEP:', error);
+                });
+        }
+
+        function displayResult(data) {
+            var resultContainer = document.getElementById('result-container');
+            resultContainer.style.display = 'block';
+
+            document.getElementById('cep').innerText = data.cep;
+            document.getElementById('state').innerText = data.state;
+            document.getElementById('city').innerText = data.city;
+            document.getElementById('neighborhood').innerText = data.neighborhood;
+            document.getElementById('street').innerText = data.street;
+            document.getElementById('result').innerText = data.service;
+        }
+    </script>
+</body>
+</html>
